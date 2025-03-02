@@ -18,8 +18,6 @@ stock_data.columns = ['Open', 'High', 'Low', 'Close', 'Volume']
 # Check the data after renaming the columns
 print(stock_data.head())
 
-
-
 # Feature Engineering (Previous day's closing price)
 stock_data['Prev Close'] = stock_data['Close'].shift(1)
 stock_data = stock_data.dropna()
