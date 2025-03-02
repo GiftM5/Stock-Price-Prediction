@@ -7,7 +7,7 @@ import yfinance as yf
 
 stock_symbol = 'AAPL'
 start_date = '2020-01-01'
-end_date = '2024-01-01'
+end_date = '2025-01-01'
 print('Fetching data for stock:', stock_symbol)
 stock_data = yf.download(stock_symbol, start=start_date, end=end_date)
 print(stock_data.head())
