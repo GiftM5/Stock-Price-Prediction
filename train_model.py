@@ -28,15 +28,12 @@ X = stock_data[['Prev Close']]
 y = stock_data['Close']
 
 # Split Data into Training and Testing Sets
-# Split Data into Training and Testing Sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Train the Linear Regression Model
 # Train the Linear Regression Model
 model = LinearRegression()
 model.fit(X_train, y_train)
 
-# Make Predictions on the Test Set
 # Make Predictions on the Test Set
 y_pred = model.predict(X_test)
 y_test = pd.to_numeric(y_test, errors='coerce') 
@@ -72,7 +69,6 @@ plt.xticks(rotation=45)
 plt.tight_layout()
 plt.show()
 
-# Save the Trained Model
 # Save the Trained Model
 joblib.dump(model, 'stock_price_predictor.pkl')
 print("Model saved to 'stock_price_predictor.pkl'.")
