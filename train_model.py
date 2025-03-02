@@ -7,7 +7,18 @@ import matplotlib.pyplot as plt
 import joblib  # For saving the model
 
 # Load the Stock Data
-stock_data = pd.read_csv("stock_data.csv", index_col=0, parse_dates=True)
+import pandas as pd
+
+# Load the data again (skip the first two rows and set 'Date' as the index)
+stock_data = pd.read_csv("stock_data.csv", header=2, parse_dates=[0], index_col=0)
+
+# Rename the columns for clarity
+stock_data.columns = ['Open', 'High', 'Low', 'Close', 'Volume']
+
+# Check the data after renaming the columns
+print(stock_data.head())
+
+
 
 # Feature Engineering (Previous day's closing price)
 stock_data['Prev Close'] = stock_data['Close'].shift(1)
@@ -25,6 +36,12 @@ model.fit(X_train, y_train)
 
 # Make Predictions on the Test Set
 y_pred = model.predict(X_test)
+y_test = pd.to_numeric(y_test, errors='coerce') 
+y_pred = pd.to_numeric(y_pred, errors='coerce')
+
+# Now apply plt.ylim after ensuring both are numeric
+plt.ylim([min(y_test.min(), y_pred.min()) - 10, max(y_test.max(), y_pred.max()) + 10])
+
 
 # Evaluate the Model
 mae = mean_absolute_error(y_test, y_pred)
@@ -35,14 +52,20 @@ print(f"Mean Absolute Error: {mae}")
 print(f"R² Score: {r2}")
 
 # Visualize the Results
-plt.figure(figsize=(12, 5))
-plt.plot(y_test.index, y_test, label="Actual Prices", color='blue')
-plt.plot(y_test.index, y_pred, label="Predicted Prices", color='red', linestyle='--')
-plt.title('Stock Price Prediction')
+print(stock_data['Close'].isnull().sum())
+
+
+stock_data = stock_data.dropna(subset=['Close'])
+
+
+plt.figure(figsize=(10, 6))
+plt.plot(stock_data.index, stock_data['Close'], label='Close Price', color='b')
+plt.title('Stock Close Price Over Time')
 plt.xlabel('Date')
-plt.ylabel('Stock Price (USD)')
-plt.xticks(rotation=45, ha="right")
+plt.ylabel('Close Price (USD)')
+plt.grid(True)
 plt.legend()
+plt.xticks(rotation=45)
 plt.tight_layout()
 plt.show()
 
